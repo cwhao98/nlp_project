@@ -19,8 +19,7 @@ class TextCNN(Base):
     def __init__(self,
                  args,
                  kernel_sizes=[3, 4, 5],
-                 num_channels=[50, 50, 50],
-                 num_emotion=2):
+                 num_channels=[50, 50, 50]):
 
         super(TextCNN, self).__init__(args=args)
 
@@ -36,7 +35,7 @@ class TextCNN(Base):
         
         self.decoder = nn.Linear(sum(num_channels), args.num_emotion)
 
-        self.optimizer = torch.optim.Adam(self.parameters(), lr=args.lr)
+        # self.optimizer = torch.optim.Adam(self.parameters(), lr=args.lr)
         self.loss = nn.CrossEntropyLoss()
 
     def forward(self, inputs):

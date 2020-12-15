@@ -18,11 +18,11 @@ class Base(nn.Module, metaclass=ABCMeta):
         if not os.path.isdir(args.log_dir):
             os.makedirs(args.log_dir)
 
-    def run(self, train_data, val_data):
+    def run(self, train_data, val_data, optimizer=None):
         best_acc, best_acc_epoch = 0., 0
         for epoch in range(self.args.num_epoch):
             # training
-            self.run_train(train_data)
+            self.run_train(train_data, optimizer)
 
             # validate 
             acc = self.run_test(val_data)
@@ -34,23 +34,23 @@ class Base(nn.Module, metaclass=ABCMeta):
 
             print('epoch: %d, accuracy: %.4f' % (epoch+1, acc))
             if (epoch+1)  % 10 == 0:
-                print('\nbest acc epoch: %d, acc: %.4f\n' % (best_acc_epoch, best_acc))
+                print('\nbest epoch: %d, accuracy: %.4f\n' % (best_acc_epoch, best_acc))
 
     @abstractmethod
     def forward(self, inputs):
         pass
 
-    def run_train(self, data):
+    def run_train(self, data, optimizer):
         self.train()
         random.shuffle(data)
         for batch in self.iterate(data, self.args.batchsize):
-            self.optimizer.zero_grad()
+            optimizer.zero_grad()
             output = self.forward(batch['feat'])
             loss = self.loss(output, batch['label'])
             # print(output, batch['label'])
             loss.backward()
             # torch.nn.utils.clip_grad_norm(self.parameters(), 40.)
-            self.optimizer.step()
+            optimizer.step()
            
             # print('Training loss: %.2f' % loss.cpu().item())
             # time.sleep(1)
@@ -78,7 +78,7 @@ class Base(nn.Module, metaclass=ABCMeta):
 
     def save(self, epoch=0):
         path = os.path.join(self.args.log_dir, 'best_val_acc')
-        torch.save({'epoch':epoch, 'state_dict': self.state_dict(), 'optimizer':self.optimizer.state_dict()}, path)
+        torch.save({'epoch':epoch, 'state_dict': self.state_dict()}, path)
         print('save model to:', path)
 
     def load(self, path=None):
