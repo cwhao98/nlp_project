@@ -15,7 +15,7 @@ python train.py
 
 #### Prerequisites
 
-```python
+```
 Python 3.8
 Pytorch >= 1.7.0
 ```
@@ -25,12 +25,12 @@ Pytorch >= 1.7.0
 ###### 二分类
 
 ```python3
-python train.py —num_emotion 2
+python train.py --num_emotion 2
 ```
 
 ###### 多分类
 
 ```python3
-python train.py —num_emotion 8
+python train.py --num_emotion 8
 ```
 
