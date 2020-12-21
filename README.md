@@ -1,5 +1,7 @@
 # NLP_Project
 
+**使用CNN进行情感分类**
+
 #### Quickstart
 
 ```python3
@@ -13,7 +15,7 @@ python train.py
 
 #### Prerequisites
 
-```shell
+```python
 Python 3.8
 Pytorch >= 1.7.0
 ```
